@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>express server side events example</title>
+  </head>
+
+  <body>
+    <h1>express server side events example</h1>
+
+    <table>
+      <tr>
+        <th>Id</th>
+        <th>Type</th>
+        <th>Data</th>
+      </tr>
+    </table>
+
+    <script>
+      const table = document.querySelector("table");
+      const source = new EventSource("/sse");
+
+      source.onopen = function () {
+        console.log("onopen");
+      };
+
+      source.addEventListener("idEvent", function (e) {
+        const eventRow = table.insertRow();
+        const idCell = eventRow.insertCell(0);
+        idCell.innerText = e.lastEventId;
+
+        const typeCell = eventRow.insertCell(1);
+        typeCell.innerText = "idEvent";
+
+        const dataCell = eventRow.insertCell(2);
+        dataCell.innerText = e.data;
+      });
+
+      source.onerror = function (e) {
+        console.log("onerror");
+      };
+    </script>
+  </body>
+</html>
